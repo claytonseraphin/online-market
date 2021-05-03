@@ -11,14 +11,24 @@ import ProductDetails from "./components/pages/ProductDetails.js";
 import Navbar from "./components/utility/Navbar.js";
 
 function App() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    let savedCart = [];
+    try {
+      savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    } catch (error) {
+      savedCart = [];
+    }
+    return savedCart;
+  });
   //const [quantity, setQuantity] = useState(0);
 
   window.__testsCart = cart; // used for the tests in this project
 
   useEffect(() => {
     // to visualize the cart in the console every time in changes
-    // you can also use React dev tools
+    if (cart){
+      localStorage.setItem('cart', JSON.stringify(cart))
+    }
     console.log(cart);
   }, [cart]);
   function handleProductAdd(newProduct){
